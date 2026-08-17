@@ -105,16 +105,8 @@ private struct MediumNowPlayingView: View {
 
                 Spacer()
 
-                if let playbackInterval {
-                    if snapshot.isPlaying {
-                        ProgressView(timerInterval: playbackInterval, countsDown: false)
-                            .progressViewStyle(.linear)
-                    } else {
-                        ProgressView(value: pausedProgress)
-                            .progressViewStyle(.linear)
-                    }
-
-                    elapsedTimeLabel
+                if snapshot.duration != nil, snapshot.elapsedTime != nil {
+                    PlaybackProgressView(snapshot: snapshot)
                 }
 
                 HStack {
@@ -130,34 +122,53 @@ private struct MediumNowPlayingView: View {
         .padding(14)
     }
 
-    private var playbackInterval: ClosedRange<Date>? {
-        guard let duration = snapshot.duration, duration > 0,
-              let elapsed = snapshot.elapsedTime else { return nil }
+}
 
-        let start = snapshot.updatedAt.addingTimeInterval(-elapsed)
-        return start...start.addingTimeInterval(duration)
-    }
+private struct PlaybackProgressView: View {
+    let snapshot: NowPlayingSnapshot
 
-    private var pausedProgress: Double {
-        guard let duration = snapshot.duration, duration > 0,
-              let elapsed = snapshot.elapsedTime else { return 0 }
-        return min(max(elapsed / duration, 0), 1)
-    }
-
-    @ViewBuilder
-    private var elapsedTimeLabel: some View {
-        if snapshot.isPlaying, let playbackStart {
-            Text(playbackStart, style: .timer)
-                .monospacedDigit()
-        } else if let elapsed = snapshot.elapsedTime {
-            Text(Self.formattedDuration(elapsed))
-                .monospacedDigit()
+    var body: some View {
+        if snapshot.isPlaying {
+            TimelineView(.periodic(from: .now, by: 1)) { context in
+                content(at: context.date)
+            }
+        } else {
+            content(at: snapshot.updatedAt)
         }
     }
 
-    private var playbackStart: Date? {
-        guard let elapsed = snapshot.elapsedTime else { return nil }
-        return snapshot.updatedAt.addingTimeInterval(-elapsed)
+    private func content(at date: Date) -> some View {
+        let elapsed = elapsedTime(at: date)
+
+        return VStack(spacing: 5) {
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.white.opacity(0.22))
+                    Capsule()
+                        .fill(.white.opacity(0.85))
+                        .frame(width: geometry.size.width * progress(elapsed: elapsed))
+                }
+            }
+            .frame(height: 5)
+
+            Text(Self.formattedDuration(elapsed))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    private func elapsedTime(at date: Date) -> Double {
+        guard let elapsed = snapshot.elapsedTime else { return 0 }
+        guard snapshot.isPlaying else { return elapsed }
+        return min(snapshot.duration ?? .greatestFiniteMagnitude,
+                   elapsed + max(0, date.timeIntervalSince(snapshot.updatedAt)))
+    }
+
+    private func progress(elapsed: Double) -> Double {
+        guard let duration = snapshot.duration, duration > 0 else { return 0 }
+        return min(max(elapsed / duration, 0), 1)
     }
 
     private static func formattedDuration(_ seconds: Double) -> String {
@@ -176,9 +187,9 @@ private struct SmallNowPlayingView: View {
 
                 LinearGradient(
                     stops: [
-                        .init(color: .clear, location: 0.35),
-                        .init(color: .black.opacity(0.4), location: 0.62),
-                        .init(color: .black.opacity(0.92), location: 1)
+                        .init(color: .clear, location: 0.15),
+                        .init(color: .black.opacity(0.58), location: 0.55),
+                        .init(color: .black.opacity(0.96), location: 1)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
@@ -196,10 +207,14 @@ private struct SmallNowPlayingView: View {
                             .lineLimit(1)
                     }
                 }
-                .padding(12)
+                .padding(10)
+                .background(.black.opacity(0.62), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                .padding(10)
+                .shadow(color: .black.opacity(0.8), radius: 3, y: 1)
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .clipShape(ContainerRelativeShape())
+            .compositingGroup()
         }
     }
 }
