@@ -280,7 +280,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.tverderesi.NowPlayingWidget.widget.v3;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.tverderesi.NowPlayingWidget.widget.v4;
 				PRODUCT_NAME = NowPlayingWidgetWidget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -383,7 +383,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.tverderesi.NowPlayingWidget.widget.v3;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.tverderesi.NowPlayingWidget.widget.v4;
 				PRODUCT_NAME = NowPlayingWidgetWidget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
