@@ -1,4 +1,4 @@
-import AppKit
+import ImageIO
 import SwiftUI
 import WidgetKit
 
@@ -35,9 +35,9 @@ struct NowPlayingProvider: TimelineProvider {
         NowPlayingBridge.fetch { snapshot in
             let entry = NowPlayingEntry(date: .now, snapshot: snapshot)
 
-            // Track changes trigger explicit reloads from the helper. This periodic refresh
-            // mainly keeps the displayed progress approximately current while playing.
-            let nextRefresh = Date().addingTimeInterval(snapshot.isPlaying ? 60 : 15 * 60)
+            // Track changes trigger explicit reloads from the helper. The periodic refresh
+            // recovers from any update the system may have coalesced while the helper slept.
+            let nextRefresh = Date().addingTimeInterval(15 * 60)
             completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
         }
     }
@@ -68,6 +68,7 @@ struct NowPlayingWidget: Widget {
         .configurationDisplayName("Now Playing")
         .description("Shows whatever macOS is currently playing, including Doppler.")
         .supportedFamilies([.systemSmall, .systemMedium])
+        .contentMarginsDisabled()
     }
 }
 
@@ -98,36 +99,17 @@ private struct MediumNowPlayingView: View {
                         .lineLimit(1)
                 }
 
-                Spacer(minLength: 3)
-                ProgressView(value: progress)
-                    .progressViewStyle(.linear)
+                Spacer()
 
                 HStack {
                     Image(systemName: snapshot.isPlaying ? "speaker.wave.2.fill" : "pause.fill")
                     Text(snapshot.isPlaying ? "Playing" : "Paused")
-                    Spacer()
-                    if let elapsed = snapshot.estimatedElapsedTime,
-                       let duration = snapshot.duration {
-                        Text("\(format(elapsed)) / \(format(duration))")
-                            .monospacedDigit()
-                    }
                 }
                 .font(.caption2)
                 .foregroundStyle(.secondary)
             }
         }
         .padding(14)
-    }
-
-    private var progress: Double {
-        guard let duration = snapshot.duration, duration > 0,
-              let elapsed = snapshot.estimatedElapsedTime else { return 0 }
-        return min(max(elapsed / duration, 0), 1)
-    }
-
-    private func format(_ seconds: Double) -> String {
-        let value = max(0, Int(seconds.rounded(.down)))
-        return String(format: "%d:%02d", value / 60, value % 60)
     }
 }
 
@@ -158,6 +140,7 @@ private struct SmallNowPlayingView: View {
             }
             .padding(12)
         }
+        .clipShape(ContainerRelativeShape())
     }
 }
 
@@ -167,7 +150,7 @@ private struct ArtworkView: View {
     var body: some View {
         Group {
             if let image = image {
-                Image(nsImage: image)
+                Image(decorative: image, scale: 1)
                     .resizable()
                     .scaledToFill()
             } else {
@@ -182,8 +165,9 @@ private struct ArtworkView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
-    private var image: NSImage? {
+    private var image: CGImage? {
         guard let data else { return nil }
-        return NSImage(data: data)
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        return CGImageSourceCreateImageAtIndex(source, 0, nil)
     }
 }
