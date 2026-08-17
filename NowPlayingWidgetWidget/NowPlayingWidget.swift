@@ -66,7 +66,7 @@ struct NowPlayingWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Now Playing")
-        .description("Shows whatever macOS is currently playing, including Doppler.")
+        .description("Shows what macOS is currently playing.")
         .supportedFamilies([.systemSmall, .systemMedium])
         .contentMarginsDisabled()
     }
@@ -79,6 +79,7 @@ private struct MediumNowPlayingView: View {
         HStack(spacing: 14) {
             ArtworkView(data: snapshot.artworkData)
                 .frame(width: 112, height: 112)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(snapshot.title)
@@ -117,30 +118,33 @@ private struct SmallNowPlayingView: View {
     let snapshot: NowPlayingSnapshot
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            ArtworkView(data: snapshot.artworkData)
+        GeometryReader { geometry in
+            ZStack(alignment: .bottomLeading) {
+                ArtworkView(data: snapshot.artworkData)
 
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.78)],
-                startPoint: .center,
-                endPoint: .bottom
-            )
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.78)],
+                    startPoint: .center,
+                    endPoint: .bottom
+                )
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(snapshot.title)
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .lineLimit(2)
-                if let artist = snapshot.artist {
-                    Text(artist)
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.8))
-                        .lineLimit(1)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(snapshot.title)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+                    if let artist = snapshot.artist {
+                        Text(artist)
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.8))
+                            .lineLimit(1)
+                    }
                 }
+                .padding(12)
             }
-            .padding(12)
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .clipShape(ContainerRelativeShape())
         }
-        .clipShape(ContainerRelativeShape())
     }
 }
 
@@ -162,7 +166,8 @@ private struct ArtworkView: View {
                 }
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
     }
 
     private var image: CGImage? {

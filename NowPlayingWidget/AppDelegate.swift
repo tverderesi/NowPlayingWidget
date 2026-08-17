@@ -1,4 +1,5 @@
 import AppKit
+import ImageIO
 import MediaRemoteAdapter
 import WidgetKit
 
@@ -52,9 +53,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard
             let image,
             let tiff = image.tiffRepresentation,
-            let bitmap = NSBitmapImageRep(data: tiff)
+            let source = CGImageSourceCreateWithData(tiff as CFData, nil),
+            let thumbnail = CGImageSourceCreateThumbnailAtIndex(
+                source,
+                0,
+                [
+                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                    kCGImageSourceCreateThumbnailWithTransform: true,
+                    kCGImageSourceThumbnailMaxPixelSize: 320
+                ] as CFDictionary
+            )
         else { return nil }
 
-        return bitmap.representation(using: .jpeg, properties: [.compressionFactor: 0.86])
+        return NSBitmapImageRep(cgImage: thumbnail)
+            .representation(using: .jpeg, properties: [.compressionFactor: 0.8])
     }
 }
