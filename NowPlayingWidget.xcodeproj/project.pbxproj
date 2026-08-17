@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A19E1141193A265EBD5D359 /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = AB92A9A1FD90B77D7898F397 /* MediaRemoteAdapter */; };
 		1D00C79C074E0CEFE826335C /* NowPlayingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C706F3A59A887561BDC8F31 /* NowPlayingWidgetBundle.swift */; };
+		22EFA412B8060399186B2A1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A04731C67A389746F39E949 /* Assets.xcassets */; };
 		24F1507EE068566C5E0ABE41 /* NowPlayingWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83383A64E4DD4F68F3F8B37 /* NowPlayingWidget.swift */; };
 		2AF74CDA65B0F915272F4267 /* NowPlayingWidgetKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9692207C0901AD28B9C1F5D7 /* NowPlayingWidgetKind.swift */; };
 		62F9B87FC6B80A4975BE9807 /* NowPlayingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCDC789A53475D8EACC3775 /* NowPlayingSnapshot.swift */; };
@@ -38,7 +39,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidget.appex in Embed Foundation Extensions */,
+				19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,10 +51,11 @@
 		4A73E03937E583C1D4F2FBAD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		629980DBE860A83A74C351B5 /* NowPlayingWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NowPlayingWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68851461D910662C55C20035 /* LocalNowPlayingServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNowPlayingServer.swift; sourceTree = "<group>"; };
+		7A04731C67A389746F39E949 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8AA3943AA61E802DCD598C08 /* NowPlayingWidgetWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowPlayingWidgetWidget.entitlements; sourceTree = "<group>"; };
 		9692207C0901AD28B9C1F5D7 /* NowPlayingWidgetKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetKind.swift; sourceTree = "<group>"; };
 		9A01522147AB24EFBF22FB33 /* NowPlayingWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowPlayingWidget.entitlements; sourceTree = "<group>"; };
-		A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NowPlayingWidgetWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NowPlayingWidgetWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C76DA9838345D18563CC3833 /* NowPlayingWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetApp.swift; sourceTree = "<group>"; };
 		C7BCDEB807488FC4A2C16EAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C83383A64E4DD4F68F3F8B37 /* NowPlayingWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidget.swift; sourceTree = "<group>"; };
@@ -76,7 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				629980DBE860A83A74C351B5 /* NowPlayingWidget.app */,
-				A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidget.appex */,
+				A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				C7BCDEB807488FC4A2C16EAF /* AppDelegate.swift */,
+				7A04731C67A389746F39E949 /* Assets.xcassets */,
 				68851461D910662C55C20035 /* LocalNowPlayingServer.swift */,
 				9A01522147AB24EFBF22FB33 /* NowPlayingWidget.entitlements */,
 				C76DA9838345D18563CC3833 /* NowPlayingWidgetApp.swift */,
@@ -130,6 +133,7 @@
 			buildConfigurationList = 03146B1871C189B98B93914B /* Build configuration list for PBXNativeTarget "NowPlayingWidget" */;
 			buildPhases = (
 				EC1E6E314E3E8BF102F09791 /* Sources */,
+				03430901844E082CB6BEBC20 /* Resources */,
 				A9CC7895794E6E535FCA3F0B /* Frameworks */,
 				00AD810AAF12A9015DA614ED /* Embed Foundation Extensions */,
 			);
@@ -160,7 +164,7 @@
 			packageProductDependencies = (
 			);
 			productName = NowPlayingWidgetWidgetExtension;
-			productReference = A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidget.appex */;
+			productReference = A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -170,7 +174,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2660;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					51C68BC4976B42B2B1F9E835 = {
 						ProvisioningStyle = Automatic;
@@ -202,6 +206,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		03430901844E082CB6BEBC20 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22EFA412B8060399186B2A1E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E7E8B889DC1F49E0237510F6 /* Sources */ = {
@@ -244,7 +259,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NowPlayingWidgetWidget/NowPlayingWidgetWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Now Playing";
 				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
@@ -267,7 +281,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NowPlayingWidget/NowPlayingWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Now Playing Widget";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -316,11 +329,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -341,7 +352,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -353,7 +363,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NowPlayingWidgetWidget/NowPlayingWidgetWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Now Playing";
 				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
@@ -376,7 +385,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NowPlayingWidget/NowPlayingWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Now Playing Widget";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -425,11 +433,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -443,7 +449,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
