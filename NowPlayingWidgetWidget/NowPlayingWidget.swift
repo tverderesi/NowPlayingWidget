@@ -180,6 +180,7 @@ private struct ArtworkView: View {
             if let image = image {
                 Image(decorative: image, scale: 1)
                     .resizable()
+                    .widgetAccentedRenderingMode(.fullColor)
                     .scaledToFill()
             } else {
                 ZStack {
