@@ -81,17 +81,17 @@ private struct MediumNowPlayingView: View {
                 .frame(width: 136, height: 136)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
-            VStack(alignment: .center, spacing: 5) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(snapshot.title)
                     .font(.headline)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                     .lineLimit(2)
 
                 if let artist = snapshot.artist, !artist.isEmpty {
                     Text(artist)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .lineLimit(1)
                 }
 
@@ -99,7 +99,7 @@ private struct MediumNowPlayingView: View {
                     Text(album)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .lineLimit(1)
                 }
 
@@ -115,9 +115,9 @@ private struct MediumNowPlayingView: View {
                 }
                 .font(.caption2)
                 .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(14)
     }
@@ -156,7 +156,7 @@ private struct PlaybackProgressView: View {
                 .foregroundStyle(.secondary)
                 .monospacedDigit()
         }
-        .frame(maxWidth: .infinity, alignment: .center)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func elapsedTime(at date: Date) -> Double {
