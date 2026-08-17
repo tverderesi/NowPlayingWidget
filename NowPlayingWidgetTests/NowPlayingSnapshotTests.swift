@@ -6,7 +6,7 @@ final class NowPlayingSnapshotTests: XCTestCase {
             title: "Precious",
             artist: "Depeche Mode",
             album: "Playing the Angel",
-            bundleIdentifier: "co.brushedtype.doppler-macos",
+            bundleIdentifier: "com.example.player",
             isPlaying: true,
             duration: 250,
             elapsedTime: 42,

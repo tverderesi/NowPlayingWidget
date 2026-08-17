@@ -1,6 +1,10 @@
 # Now Playing Widget for macOS
 
-A **real WidgetKit desktop / Notification Center widget** that mirrors the system-wide macOS Now Playing session, so it can show players such as Doppler rather than only Apple Music.
+A **real WidgetKit desktop / Notification Center widget** that mirrors the system-wide macOS Now Playing session across compatible media players.
+
+<p align="center">
+  <img src="Artwork/NowPlayingWidgetScreenshot.png" alt="Now Playing Widget showing small and medium layouts" width="760">
+</p>
 
 ## What it does
 
@@ -36,7 +40,7 @@ In Xcode:
 2. If Xcode offers **Sign to Run Locally**, use it. Otherwise signing with a normal Apple Account / Personal Team is sufficient for local development; a paid membership is not required.
 3. Run the app once (`⌘R`).
 4. Add **Now Playing** from macOS's widget gallery.
-5. Start a track in Doppler.
+5. Start a track in any compatible media player.
 
 There is **no App Group to configure** and no paid capability to register.
 
@@ -51,7 +55,7 @@ There is **no App Group to configure** and no paid capability to register.
 ## Architecture
 
 ```text
-Doppler / Music / Spotify / etc.
+Compatible macOS media player
           │
           ▼
 macOS Now Playing / MediaRemote
@@ -67,3 +71,11 @@ WidgetKit extension
           ▼
 Desktop / Notification Center widget
 ```
+
+## Frameworks and system technologies
+
+- **SwiftUI** builds the app and widget presentation.
+- **WidgetKit** provides the small and medium desktop / Notification Center widgets.
+- **MediaRemoteAdapter** wraps the private macOS MediaRemote interface used to observe the system-wide Now Playing session.
+- **Network** serves the latest snapshot over a localhost-only HTTP bridge.
+- **ImageIO** decodes and prepares album artwork for WidgetKit.
