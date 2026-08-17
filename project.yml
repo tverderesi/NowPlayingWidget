@@ -1,0 +1,58 @@
+name: NowPlayingWidget
+options:
+  bundleIdPrefix: dev.tverderesi
+  deploymentTarget:
+    macOS: "15.4"
+packages:
+  MediaRemoteAdapter:
+    url: https://github.com/ejbills/mediaremote-adapter.git
+    branch: master
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+    CODE_SIGN_STYLE: Automatic
+    MACOSX_DEPLOYMENT_TARGET: 15.4
+
+targets:
+  NowPlayingWidget:
+    type: application
+    platform: macOS
+    sources:
+      - NowPlayingWidget
+      - Shared
+    dependencies:
+      - package: MediaRemoteAdapter
+      - target: NowPlayingWidgetWidgetExtension
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidget
+        PRODUCT_NAME: NowPlayingWidget
+        INFOPLIST_KEY_LSUIElement: YES
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Now Playing Widget
+    entitlements:
+      path: NowPlayingWidget/NowPlayingWidget.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+
+  NowPlayingWidgetWidgetExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - NowPlayingWidgetWidget
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidget.widget
+        PRODUCT_NAME: NowPlayingWidgetWidget
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Now Playing
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking: YES
+        SKIP_INSTALL: YES
+    entitlements:
+      path: NowPlayingWidgetWidget/NowPlayingWidgetWidget.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
