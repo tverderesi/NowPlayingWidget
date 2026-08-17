@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B18F8E1A3A8548FAB6F751E /* MediaRemoteAdapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = AB92A9A1FD90B77D7898F397 /* MediaRemoteAdapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A804E46A14134117A9D6E9A8 /* NowPlayingWidgetWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A19E1141193A265EBD5D359 /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = AB92A9A1FD90B77D7898F397 /* MediaRemoteAdapter */; };
 		1D00C79C074E0CEFE826335C /* NowPlayingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C706F3A59A887561BDC8F31 /* NowPlayingWidgetBundle.swift */; };
@@ -42,6 +43,17 @@
 				19820A3E35D6DDC927BDEF44 /* NowPlayingWidgetWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FA5667D60D2194F025A263C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0B18F8E1A3A8548FAB6F751E /* MediaRemoteAdapter in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -138,6 +150,7 @@
 				03430901844E082CB6BEBC20 /* Resources */,
 				A9CC7895794E6E535FCA3F0B /* Frameworks */,
 				00AD810AAF12A9015DA614ED /* Embed Foundation Extensions */,
+				5FA5667D60D2194F025A263C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

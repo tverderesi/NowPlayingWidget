@@ -24,6 +24,7 @@ targets:
       - Shared
     dependencies:
       - package: MediaRemoteAdapter
+        embed: true
       - target: NowPlayingWidgetWidgetExtension
         embed: true
     settings:

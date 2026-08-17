@@ -13,7 +13,7 @@ final class LocalNowPlayingServer {
             parameters.allowLocalEndpointReuse = true
             let port = NWEndpoint.Port(rawValue: NowPlayingBridge.port)!
             parameters.requiredLocalEndpoint = .hostPort(host: "127.0.0.1", port: port)
-            listener = try NWListener(using: parameters, on: port)
+            listener = try NWListener(using: parameters)
             listener?.newConnectionHandler = { [weak self] connection in
                 self?.handle(connection)
             }
