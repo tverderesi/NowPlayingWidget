@@ -3,6 +3,16 @@ options:
   bundleIdPrefix: dev.tverderesi
   deploymentTarget:
     macOS: "15.4"
+schemes:
+  NowPlayingWidget:
+    build:
+      targets:
+        NowPlayingWidget: all
+        NowPlayingWidgetWidgetExtension: all
+        NowPlayingWidgetTests: [test]
+    test:
+      targets:
+        - NowPlayingWidgetTests
 packages:
   MediaRemoteAdapter:
     url: https://github.com/ejbills/mediaremote-adapter.git
@@ -13,7 +23,7 @@ settings:
     CODE_SIGN_STYLE: Automatic
     MACOSX_DEPLOYMENT_TARGET: 15.4
     MARKETING_VERSION: "1.0.9"
-    CURRENT_PROJECT_VERSION: "9"
+    CURRENT_PROJECT_VERSION: "13"
 
 targets:
   NowPlayingWidget:
@@ -59,7 +69,7 @@ targets:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidget.widget.v4
+        PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidget.widget.v8
         PRODUCT_NAME: NowPlayingWidgetWidget
         SKIP_INSTALL: YES
     entitlements:
@@ -67,3 +77,15 @@ targets:
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.network.client: true
+
+  NowPlayingWidgetTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - NowPlayingWidgetTests
+      - Shared
+      - NowPlayingWidget/LocalNowPlayingServer.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidgetTests
+        GENERATE_INFOPLIST_FILE: YES

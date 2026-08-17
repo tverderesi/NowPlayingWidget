@@ -103,19 +103,10 @@ private struct MediumNowPlayingView: View {
                         .lineLimit(1)
                 }
 
-                Spacer()
-
                 if snapshot.duration != nil, snapshot.elapsedTime != nil {
                     PlaybackProgressView(snapshot: snapshot)
+                        .padding(.top, 8)
                 }
-
-                HStack {
-                    Image(systemName: snapshot.isPlaying ? "speaker.wave.2.fill" : "pause.fill")
-                    Text(snapshot.isPlaying ? "Playing" : "Paused")
-                }
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -128,30 +119,24 @@ private struct PlaybackProgressView: View {
     let snapshot: NowPlayingSnapshot
 
     var body: some View {
-        if snapshot.isPlaying {
-            TimelineView(.periodic(from: .now, by: 1)) { context in
-                content(at: context.date)
-            }
-        } else {
-            content(at: snapshot.updatedAt)
-        }
-    }
-
-    private func content(at date: Date) -> some View {
-        let elapsed = elapsedTime(at: date)
-
-        return VStack(spacing: 5) {
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(.white.opacity(0.22))
-                    Capsule()
-                        .fill(.white.opacity(0.85))
-                        .frame(width: geometry.size.width * progress(elapsed: elapsed))
+        VStack(alignment: .leading, spacing: 5) {
+            if let playbackInterval = PlaybackMetrics.playbackInterval(for: snapshot) {
+                ProgressView(timerInterval: playbackInterval, countsDown: false) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
                 }
+                .progressViewStyle(.linear)
+            } else {
+                ProgressView(value: PlaybackMetrics.progress(for: snapshot, at: snapshot.updatedAt))
+                    .progressViewStyle(.linear)
             }
-            .frame(height: 5)
 
-            Text(Self.formattedDuration(elapsed))
+            HStack {
+                Image(systemName: snapshot.isPlaying ? "play.fill" : "pause.fill")
+                Spacer()
+                elapsedTimeLabel
+            }
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .monospacedDigit()
@@ -159,22 +144,20 @@ private struct PlaybackProgressView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func elapsedTime(at date: Date) -> Double {
-        guard let elapsed = snapshot.elapsedTime else { return 0 }
-        guard snapshot.isPlaying else { return elapsed }
-        return min(snapshot.duration ?? .greatestFiniteMagnitude,
-                   elapsed + max(0, date.timeIntervalSince(snapshot.updatedAt)))
+    @ViewBuilder
+    private var elapsedTimeLabel: some View {
+        if snapshot.isPlaying, let playbackStart {
+            Text(playbackStart, style: .timer)
+        } else {
+            Text(PlaybackMetrics.formattedDuration(snapshot.elapsedTime ?? 0))
+        }
     }
 
-    private func progress(elapsed: Double) -> Double {
-        guard let duration = snapshot.duration, duration > 0 else { return 0 }
-        return min(max(elapsed / duration, 0), 1)
+    private var playbackStart: Date? {
+        guard let elapsed = snapshot.elapsedTime else { return nil }
+        return snapshot.updatedAt.addingTimeInterval(-elapsed)
     }
 
-    private static func formattedDuration(_ seconds: Double) -> String {
-        let total = max(0, Int(seconds.rounded(.down)))
-        return String(format: "%d:%02d", total / 60, total % 60)
-    }
 }
 
 private struct SmallNowPlayingView: View {
@@ -183,17 +166,7 @@ private struct SmallNowPlayingView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottomLeading) {
-                ArtworkView(data: snapshot.artworkData)
-
-                LinearGradient(
-                    stops: [
-                        .init(color: .clear, location: 0.15),
-                        .init(color: .black.opacity(0.58), location: 0.55),
-                        .init(color: .black.opacity(0.96), location: 1)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                ArtworkView(data: snapshot.artworkData, addsBottomGradient: true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(snapshot.title)
@@ -207,10 +180,9 @@ private struct SmallNowPlayingView: View {
                             .lineLimit(1)
                     }
                 }
-                .padding(10)
-                .background(.black.opacity(0.62), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
-                .padding(10)
+                .padding(12)
                 .shadow(color: .black.opacity(0.8), radius: 3, y: 1)
+                .widgetAccentable(false)
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .clipShape(ContainerRelativeShape())
@@ -221,6 +193,7 @@ private struct SmallNowPlayingView: View {
 
 private struct ArtworkView: View {
     let data: Data?
+    var addsBottomGradient = false
 
     var body: some View {
         Group {
@@ -245,6 +218,43 @@ private struct ArtworkView: View {
     private var image: CGImage? {
         guard let data else { return nil }
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
-        return CGImageSourceCreateImageAtIndex(source, 0, nil)
+        guard let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        return addsBottomGradient ? image.addingBottomGradient() : image
+    }
+}
+
+private extension CGImage {
+    func addingBottomGradient() -> CGImage {
+        guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB),
+              let context = CGContext(
+                data: nil,
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bytesPerRow: 0,
+                space: colorSpace,
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+              ) else { return self }
+
+        context.draw(self, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        let colors = [
+            CGColor(gray: 0, alpha: 0.96),
+            CGColor(gray: 0, alpha: 0.62),
+            CGColor(gray: 0, alpha: 0)
+        ] as CFArray
+        guard let gradient = CGGradient(
+            colorsSpace: CGColorSpaceCreateDeviceGray(),
+            colors: colors,
+            locations: [0, 0.48, 1]
+        ) else { return self }
+
+        context.drawLinearGradient(
+            gradient,
+            start: CGPoint(x: 0, y: 0),
+            end: CGPoint(x: 0, y: CGFloat(height) * 0.72),
+            options: []
+        )
+        return context.makeImage() ?? self
     }
 }

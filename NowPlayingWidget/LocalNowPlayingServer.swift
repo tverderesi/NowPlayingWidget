@@ -2,23 +2,30 @@ import Foundation
 import Network
 
 final class LocalNowPlayingServer {
+    private let port: UInt16
     private let queue = DispatchQueue(label: "NowPlayingWidget.LocalServer")
     private var listener: NWListener?
     private let lock = NSLock()
     private var snapshot: NowPlayingSnapshot = .empty
 
-    func start() {
+    init(port: UInt16 = NowPlayingBridge.port) {
+        self.port = port
+    }
+
+    func start(onReady: (() -> Void)? = nil) {
         do {
             let parameters = NWParameters.tcp
             parameters.allowLocalEndpointReuse = true
-            let port = NWEndpoint.Port(rawValue: NowPlayingBridge.port)!
+            let port = NWEndpoint.Port(rawValue: port)!
             parameters.requiredLocalEndpoint = .hostPort(host: "127.0.0.1", port: port)
             listener = try NWListener(using: parameters)
             listener?.newConnectionHandler = { [weak self] connection in
                 self?.handle(connection)
             }
             listener?.stateUpdateHandler = { state in
-                if case let .failed(error) = state {
+                if case .ready = state {
+                    onReady?()
+                } else if case let .failed(error) = state {
                     NSLog("NowPlayingWidget: local bridge failed: \(error)")
                 }
             }
