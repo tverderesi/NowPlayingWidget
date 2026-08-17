@@ -12,8 +12,8 @@ settings:
     SWIFT_VERSION: 5.0
     CODE_SIGN_STYLE: Automatic
     MACOSX_DEPLOYMENT_TARGET: 15.4
-    MARKETING_VERSION: "1.0.6"
-    CURRENT_PROJECT_VERSION: "6"
+    MARKETING_VERSION: "1.0.7"
+    CURRENT_PROJECT_VERSION: "7"
 
 targets:
   NowPlayingWidget:
@@ -27,6 +27,7 @@ targets:
         embed: true
       - target: NowPlayingWidgetWidgetExtension
         embed: true
+        codeSign: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.tverderesi.NowPlayingWidget
