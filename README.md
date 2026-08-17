@@ -52,6 +52,12 @@ There is **no App Group to configure** and no paid capability to register.
 - MediaRemote is private API territory. The adapter currently targets the post-macOS-15.4 situation, but a future macOS release can break it again.
 - Because this relies on private-system behavior, treat it as a personal utility rather than something intended for Mac App Store distribution.
 
+## Memory usage
+
+The background helper used an approximately **13 MB physical memory footprint** during a local measurement on Apple silicon while actively serving playback metadata. Process RSS was about **61 MB**. Actual usage varies with macOS, artwork decoding, and the active media player.
+
+The WidgetKit extension is a separate, short-lived process that macOS launches, suspends, and terminates as needed, so its memory is not continuously allocated.
+
 ## Architecture
 
 ```text
