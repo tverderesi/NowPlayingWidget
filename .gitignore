@@ -1,5 +1,6 @@
 .DS_Store
 DerivedData/
 dist/
+dist-intel/
 *.xcuserstate
 xcuserdata/
