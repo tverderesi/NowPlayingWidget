@@ -102,6 +102,16 @@ private struct MediumNowPlayingView: View {
 
                 Spacer()
 
+                if let playbackInterval {
+                    if snapshot.isPlaying {
+                        ProgressView(timerInterval: playbackInterval, countsDown: false)
+                            .progressViewStyle(.linear)
+                    } else {
+                        ProgressView(value: pausedProgress)
+                            .progressViewStyle(.linear)
+                    }
+                }
+
                 HStack {
                     Image(systemName: snapshot.isPlaying ? "speaker.wave.2.fill" : "pause.fill")
                     Text(snapshot.isPlaying ? "Playing" : "Paused")
@@ -111,6 +121,20 @@ private struct MediumNowPlayingView: View {
             }
         }
         .padding(14)
+    }
+
+    private var playbackInterval: ClosedRange<Date>? {
+        guard let duration = snapshot.duration, duration > 0,
+              let elapsed = snapshot.elapsedTime else { return nil }
+
+        let start = snapshot.updatedAt.addingTimeInterval(-elapsed)
+        return start...start.addingTimeInterval(duration)
+    }
+
+    private var pausedProgress: Double {
+        guard let duration = snapshot.duration, duration > 0,
+              let elapsed = snapshot.elapsedTime else { return 0 }
+        return min(max(elapsed / duration, 0), 1)
     }
 }
 
