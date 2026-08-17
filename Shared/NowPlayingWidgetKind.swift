@@ -1,5 +1,5 @@
 import Foundation
 
 enum NowPlayingWidgetKind {
-    static let identifier = "NowPlayingWidget.v2"
+    static let identifier = "NowPlayingWidget.v3"
 }

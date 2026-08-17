@@ -78,18 +78,20 @@ private struct MediumNowPlayingView: View {
     var body: some View {
         HStack(spacing: 14) {
             ArtworkView(data: snapshot.artworkData)
-                .frame(width: 112, height: 112)
+                .frame(width: 136, height: 136)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .center, spacing: 5) {
                 Text(snapshot.title)
                     .font(.headline)
+                    .multilineTextAlignment(.center)
                     .lineLimit(2)
 
                 if let artist = snapshot.artist, !artist.isEmpty {
                     Text(artist)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                         .lineLimit(1)
                 }
 
@@ -97,6 +99,7 @@ private struct MediumNowPlayingView: View {
                     Text(album)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
+                        .multilineTextAlignment(.center)
                         .lineLimit(1)
                 }
 
@@ -110,6 +113,8 @@ private struct MediumNowPlayingView: View {
                         ProgressView(value: pausedProgress)
                             .progressViewStyle(.linear)
                     }
+
+                    elapsedTimeLabel
                 }
 
                 HStack {
@@ -118,7 +123,9 @@ private struct MediumNowPlayingView: View {
                 }
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(14)
     }
@@ -136,6 +143,27 @@ private struct MediumNowPlayingView: View {
               let elapsed = snapshot.elapsedTime else { return 0 }
         return min(max(elapsed / duration, 0), 1)
     }
+
+    @ViewBuilder
+    private var elapsedTimeLabel: some View {
+        if snapshot.isPlaying, let playbackStart {
+            Text(playbackStart, style: .timer)
+                .monospacedDigit()
+        } else if let elapsed = snapshot.elapsedTime {
+            Text(Self.formattedDuration(elapsed))
+                .monospacedDigit()
+        }
+    }
+
+    private var playbackStart: Date? {
+        guard let elapsed = snapshot.elapsedTime else { return nil }
+        return snapshot.updatedAt.addingTimeInterval(-elapsed)
+    }
+
+    private static func formattedDuration(_ seconds: Double) -> String {
+        let total = max(0, Int(seconds.rounded(.down)))
+        return String(format: "%d:%02d", total / 60, total % 60)
+    }
 }
 
 private struct SmallNowPlayingView: View {
@@ -147,8 +175,12 @@ private struct SmallNowPlayingView: View {
                 ArtworkView(data: snapshot.artworkData)
 
                 LinearGradient(
-                    colors: [.clear, .black.opacity(0.78)],
-                    startPoint: .center,
+                    stops: [
+                        .init(color: .clear, location: 0.35),
+                        .init(color: .black.opacity(0.4), location: 0.62),
+                        .init(color: .black.opacity(0.92), location: 1)
+                    ],
+                    startPoint: .top,
                     endPoint: .bottom
                 )
 
